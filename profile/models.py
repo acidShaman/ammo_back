@@ -10,7 +10,7 @@ class MenuModel(models.Model):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
-    category = models.CharField(max_length=20, unique=True, validators=[
+    category = models.CharField(max_length=20, blank=False,unique=True, validators=[
         RegexValidator('^([a-zA-Z]{1,20})$', 'Category must be only letters 1 - 20 chars long')])
 
 
@@ -23,7 +23,7 @@ class DishModel(models.Model):
     name = models.CharField(max_length=50, blank=False, unique=True, validators=[
         RegexValidator('^([a-zA-Z,./`!\']{1,50})$', 'Name can contain a-z A-Z and some spec chars max 50 chars')])
     category = models.ForeignKey(MenuModel, on_delete=models.CASCADE)
-    price = models.PositiveIntegerField()
+    price = models.PositiveIntegerField(blank=False)
     user_liked = models.ManyToManyField(User, through='FavoritesModel')
 
 
@@ -55,11 +55,12 @@ class ProfileModel(models.Model):
         verbose_name_plural = 'profiles'
 
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    phone = models.CharField(max_length=15, unique=True, validators=[
+    phone = models.CharField(max_length=15, blank=False, unique=True, validators=[
         RegexValidator('^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$',
                        'Phone number must look like this +380112233445')],
-                             error_messages={'error' : 'Phone number might already ne used, please try another one'})
+                             error_messages={'error': 'Phone number might already ne used, please try another one'})
     birthday = models.DateField(max_length=10)
+    sex = models.CharField(max_length=10, default='not given')
 
 
 class AddressModel(models.Model):
