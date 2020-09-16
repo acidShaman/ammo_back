@@ -69,7 +69,7 @@ class AddressModel(models.Model):
         verbose_name = 'address'
         verbose_name_plural = 'addresses'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE)
     street = models.CharField(max_length=50, blank=False, validators=[
         RegexValidator('^([a-zA-Z.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
