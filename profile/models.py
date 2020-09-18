@@ -62,6 +62,9 @@ class ProfileModel(models.Model):
     birthday = models.DateField(max_length=10)
     sex = models.CharField(max_length=10, default='not given')
 
+    def __str__(self):
+        return f'{self.user.username}, {self.user.first_name}, {self.user.last_name}, {self.sex}, {self.birthday}, {self.phone}'
+
 
 class AddressModel(models.Model):
     class Meta:
@@ -73,7 +76,7 @@ class AddressModel(models.Model):
     street = models.CharField(max_length=50, blank=False, validators=[
         RegexValidator('^([a-zA-Z.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-Z]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
     entrance = models.IntegerField()
     housing = models.CharField(max_length=5, blank=True)
     door = models.CharField(max_length=7, blank=True, validators=[
