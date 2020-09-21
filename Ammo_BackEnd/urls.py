@@ -23,5 +23,5 @@ urlpatterns = [
     # path('auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view()),
     path('token/refresh/', TokenRefreshView.as_view()),
-    path('profile/', include('profile.urls'))
+    path('profile/', include('profile.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

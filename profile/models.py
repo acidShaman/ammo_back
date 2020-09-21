@@ -77,11 +77,11 @@ class AddressModel(models.Model):
         RegexValidator('^([a-zA-Z.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
         RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
-    entrance = models.IntegerField()
-    housing = models.CharField(max_length=5, blank=True)
-    door = models.CharField(max_length=7, blank=True, validators=[
+    entrance = models.IntegerField(blank=True, null=True)
+    housing = models.CharField(max_length=5, blank=True, null=True)
+    door = models.CharField(max_length=7, blank=True, null=True,validators=[
         RegexValidator('^([0-9]+\s*([a-zA-Z]{0,}))$', 'Number must look like 78a or 78')])
-    floor = models.IntegerField(blank=True)
+    floor = models.IntegerField(blank=True, null=True)
 
 
 class OrderItemModel(models.Model):
@@ -116,4 +116,3 @@ class FavoritesModel(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
-    

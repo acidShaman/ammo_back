@@ -16,10 +16,11 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
-from profile.views import ShowProfileView, CreateProfileView, UpdateProfileView
+from profile.views import ShowProfileView, CreateProfileView, UpdateProfileView, CreateUpdateAddressView
 
 urlpatterns = [
     path('', ShowProfileView.as_view()),
     path('register/', CreateProfileView.as_view()),
     path('<int:id>/', UpdateProfileView.as_view()),
+    path('<int:user_id>/address/', CreateUpdateAddressView.as_view()),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
