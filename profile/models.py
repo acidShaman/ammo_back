@@ -72,16 +72,19 @@ class AddressModel(models.Model):
         verbose_name = 'address'
         verbose_name_plural = 'addresses'
 
-    user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='address', on_delete=models.CASCADE)
     street = models.CharField(max_length=50, blank=False, validators=[
-        RegexValidator('^([a-zA-Z.,-]{1,50})$', 'Street must contain only letters and , . -')])
+        RegexValidator('^([a-zA-Zа-яА-ЯЄєЇїёЁ.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
         RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
-    entrance = models.IntegerField(blank=True, null=True)
-    housing = models.CharField(max_length=5, blank=True, null=True)
-    door = models.CharField(max_length=7, blank=True, null=True,validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-Z]{0,}))$', 'Number must look like 78a or 78')])
-    floor = models.IntegerField(blank=True, null=True)
+    entrance = models.CharField(max_length=6, blank=True, null=True, validators=[
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
+    housing = models.CharField(max_length=5, blank=True, null=True, validators=[
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
+    door = models.CharField(max_length=7, blank=True, null=True, validators=[
+        RegexValidator('^([0-9]+\s*([a-zA-Zа-яА-Я]{0,}))$', 'Number must look like 78a or 78')])
+    floor = models.CharField(max_length=6, blank=True, null=True, validators=[
+        RegexValidator('^([0-9]{0,}))$', 'Number must look like 78a or 78')])
 
 
 class OrderItemModel(models.Model):

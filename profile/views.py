@@ -21,29 +21,31 @@ class CreateUpdateAddressView(APIView):
     @classmethod
     def post(cls, request: Request, user_id):
         try:
-            candidate = AddressModel.objects.get(user_id=user_id)
-            if not candidate:
+            print(request.data)
+            candidate = ProfileModel.objects.get(user_id=user_id)
+            print(candidate.user.address)
+            if candidate.user.address is None:
                 AddressModel(
-                    street=request.data.street,
-                    number=request.data.number,
-                    entrance=request.data.entrance,
-                    housing=request.data.housing,
-                    door=request.data.door,
-                    floor=request.data.floor,
+                    street=request.data.get('street', ''),
+                    number=request.data.get('number', ''),
+                    entrance=request.data.get('entrance', ''),
+                    housing=request.data.get('housing', ''),
+                    door=request.data.get('door', ''),
+                    floor=request.data.get('floor', ''),
                     user_id=user_id
                 ).save()
                 return Response({'message': f'Address was added to user {user_id}'})
             AddressModel.objects.filter(user_id=user_id).update(
-                street=request.data.street,
-                number=request.data.number,
-                entrance=request.data.entrance,
-                housing=request.data.housing,
-                door=request.data.door,
-                floor=request.data.floor,
+                street=request.data.get('street', ''),
+                number=request.data.get('number', ''),
+                entrance=request.data.get('entrance', ''),
+                housing=request.data.get('housing', ''),
+                door=request.data.get('door', ''),
+                floor=request.data.get('floor', ''),
             )
             return Response({'message': 'Address was updated successfully!'})
         except TypeError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except RuntimeError as err:
             return Response({'error': err})
         except AssertionError as err:
@@ -53,7 +55,7 @@ class CreateUpdateAddressView(APIView):
         except IntegrityError as error:
             return Response({'error': error})
         except AttributeError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
 
 
 class ShowProfileView(APIView):

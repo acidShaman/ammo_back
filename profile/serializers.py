@@ -10,11 +10,11 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    addresses = AddressSerializer(many=True)
+    address = AddressSerializer(many=False)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'addresses']
+        fields = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'address']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
