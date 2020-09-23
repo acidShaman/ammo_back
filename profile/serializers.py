@@ -10,7 +10,7 @@ class AddressSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    address = AddressSerializer(many=False)
+    address = AddressSerializer(many=True)
 
     class Meta:
         model = User

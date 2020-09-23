@@ -14,17 +14,11 @@ class CreateUpdateAddressView(APIView):
     serializer_class = AddressSerializer
     permission_classes = [IsAuthenticated]
 
-    # @classmethod
-    # def post(cls, request: Request, id):
-    #
-
     @classmethod
     def post(cls, request: Request, user_id):
         try:
-            print(request.data)
-            candidate = ProfileModel.objects.get(user_id=user_id)
-            print(candidate.user.address)
-            if candidate.user.address is None:
+            candidate = AddressModel.objects.filter(user_id=user_id)
+            if not candidate:
                 AddressModel(
                     street=request.data.get('street', ''),
                     number=request.data.get('number', ''),
@@ -47,13 +41,13 @@ class CreateUpdateAddressView(APIView):
         except TypeError as err:
             return Response({'error': str(err)})
         except RuntimeError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except AssertionError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except ValidationError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except IntegrityError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
         except AttributeError as error:
             return Response({'error': str(error)})
 
@@ -70,15 +64,15 @@ class ShowProfileView(APIView):
                 return Response({'error': 'User doesn\'t exist!'})
             return Response(ProfileSerializer(profile).data)
         except RuntimeError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except AssertionError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except ValidationError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except IntegrityError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
         except AttributeError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
 
 
 class UpdateProfileView(APIView):
@@ -95,19 +89,20 @@ class UpdateProfileView(APIView):
                 phone=request.data.get('phone'), sex=request.data.get('sex'), birthday=request.data.get('birthday')
             )
             User.objects.filter(pk=id).update(
-                username=request.data.get('username'), first_name=request.data.get('first_name'), last_name=request.data.get('last_name')
+                username=request.data.get('username'), first_name=request.data.get('first_name'),
+                last_name=request.data.get('last_name')
             )
             return Response({'message': f'{request.data["username"]} was updated successfully!'})
         except RuntimeError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except AssertionError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except ValidationError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except IntegrityError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
         except AttributeError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
 
 
 class CreateProfileView(APIView):
@@ -129,12 +124,12 @@ class CreateProfileView(APIView):
             profile.save()
             return Response({'message': 'Done', 'user': request.user, 'token': request.token})
         except RuntimeError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except AssertionError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except ValidationError as err:
-            return Response({'error': err})
+            return Response({'error': str(err)})
         except IntegrityError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})
         except AttributeError as error:
-            return Response({'error': error})
+            return Response({'error': str(error)})

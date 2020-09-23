@@ -3,49 +3,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
 
-
-class MenuModel(models.Model):
-    class Meta:
-        db_table = 'menu'
-        verbose_name = 'category'
-        verbose_name_plural = 'categories'
-
-    category = models.CharField(max_length=20, blank=False,unique=True, validators=[
-        RegexValidator('^([a-zA-Z]{1,20})$', 'Category must be only letters 1 - 20 chars long')])
-
-
-class DishModel(models.Model):
-    class Meta:
-        db_table = 'dishes'
-        verbose_name = 'dish'
-        verbose_name_plural = 'dishes'
-
-    name = models.CharField(max_length=50, blank=False, unique=True, validators=[
-        RegexValidator('^([a-zA-Z,./`!\']{1,50})$', 'Name can contain a-z A-Z and some spec chars max 50 chars')])
-    category = models.ForeignKey(MenuModel, on_delete=models.CASCADE)
-    price = models.PositiveIntegerField(blank=False)
-    user_liked = models.ManyToManyField(User, through='FavoritesModel')
-
-
-class ImgModel(models.Model):
-    class Meta:
-        db_table = 'images'
-        verbose_name = 'image'
-        verbose_name_plural = 'images'
-
-    image = models.ImageField(upload_to=os.path.join('dishes', 'img'), default='', blank=True)
-    dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
-
-
-class IngredientModel(models.Model):
-    class Meta:
-        db_table = 'ingredients'
-        verbose_name = 'ingredient'
-        verbose_name_plural = 'ingredients'
-
-    ingredient = models.CharField(max_length=30, unique=True, validators=[
-        RegexValidator('^([a-zA-Z0-9.]{1,30})$', 'Ingredient might contain letters, numbers and . 30 chars maximum')])
-    dish = models.ManyToManyField(DishModel)
+from menu.models import DishModel
 
 
 class ProfileModel(models.Model):
@@ -111,11 +69,5 @@ class OrderModel(models.Model):
     order_items = models.ManyToManyField(OrderItemModel, related_name='orders')
 
 
-class FavoritesModel(models.Model):
-    class Meta:
-        db_table = 'favorite_dishes'
-        verbose_name = 'fav_dish'
-        verbose_name_plural = 'fav_dishes'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
+
