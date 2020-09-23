@@ -15,12 +15,13 @@ class ShowMenuView(APIView):
     serializer_class = MenuSerializer
     permission_classes = [AllowAny]
 
+
     def get(self, request: Request):
         try:
-            menu = MenuModel.objects.all()
-            # print(MenuSerializer(menu).data)
-            if not menu:
+            categories = MenuModel.objects.order_by('id').all()
+            print(MenuSerializer(categories, many=True).data)
+            if not categories:
                 return Response({'message': 'There is no dishes available at the moment!'})
-            return Response(MenuSerializer(menu).data)
+            return Response(MenuSerializer(categories, many=True).data)
         except AttributeError as err:
             return Response({'error': str(err)})

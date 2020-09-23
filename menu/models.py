@@ -36,6 +36,9 @@ class DishModel(models.Model):
     weight = models.PositiveIntegerField(blank=False, null=True)
     user_liked = models.ManyToManyField(User, through='FavoritesModel')
 
+    def __str__(self):
+        return ' ,'.join([str(self.id), str(self.name), str(self.category), str(self.price), str(self.about_dish), str(self.ingredients), str(self.weight)])
+
 
 # class ImgModel(models.Model):
 #     class Meta:
