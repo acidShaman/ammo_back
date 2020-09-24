@@ -40,14 +40,14 @@ class DishModel(models.Model):
         return ' ,'.join([str(self.id), str(self.name), str(self.category), str(self.price), str(self.about_dish), str(self.ingredients), str(self.weight)])
 
 
-# class ImgModel(models.Model):
-#     class Meta:
-#         db_table = 'images'
-#         verbose_name = 'image'
-#         verbose_name_plural = 'images'
-#
-#     image = models.ImageField(upload_to=os.path.join('dishes', 'img'), default='', blank=True)
-#     dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
+class ImgModel(models.Model):
+    class Meta:
+        db_table = 'images'
+        verbose_name = 'image'
+        verbose_name_plural = 'images'
+
+    image = models.ImageField(upload_to=os.path.join('images', 'dishes'), null=True, blank=True, max_length=3000)
+    dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
 
 
 # class IngredientModel(models.Model):
