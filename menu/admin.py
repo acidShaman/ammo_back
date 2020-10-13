@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from menu.models import ImgModel, DishModel
+from menu.models import DishModel, MenuModel
 
-admin.register(DishModel)
-admin.register(ImgModel)
+admin.site.register(DishModel)
+admin.site.register(MenuModel)
+# admin.site.register(ImgModel)

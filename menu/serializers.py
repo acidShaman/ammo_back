@@ -1,42 +1,22 @@
 from django.contrib.auth.models import User
 
 from menu.models import MenuModel, DishModel
-from profile.models import ProfileModel, AddressModel
 from rest_framework import serializers
 
 
-# class AddressSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = AddressModel
-#         fields = '__all__'
-#
-#
-# class UserSerializer(serializers.ModelSerializer):
-#     address = AddressSerializer(many=True)
-#
-#     class Meta:
-#         model = User
-#         fields = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'address']
-#
-#
-# class ProfileSerializer(serializers.ModelSerializer):
-#     user = UserSerializer()
-#
-#
-#     class Meta:
-#         model = ProfileModel
-#         fields = ['user', 'phone', 'birthday', 'sex']
+
 
 # class ImgSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = ImgModel
-#         fields = '__all__'
+#         fields = ['image']
 
 
 # class IngredientSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = IngredientModel
 #         fields = '__all__'
+from profile.models import ProfileModel
 
 
 class DishSerializer(serializers.ModelSerializer):
@@ -45,7 +25,7 @@ class DishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DishModel
-        fields = ['id', 'name', 'price', 'about_dish', 'ingredients']
+        fields = ['id', 'name', 'price', 'about_dish', 'ingredients', 'image']
 
 
 class MenuSerializer(serializers.ModelSerializer):
@@ -53,7 +33,14 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MenuModel
-        fields = ['id', 'category', 'dishes']
+        fields = ['id', 'category', 'name', 'dishes']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuModel
+        fields = ['id', 'category', 'name', 'image']
+
 
 
 

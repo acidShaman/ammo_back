@@ -5,6 +5,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from menu.models import DishModel
 from .serializers import ProfileSerializer, UserSerializer, AddressSerializer
 from profile.models import ProfileModel, AddressModel
 from django.contrib.auth.models import User
@@ -82,7 +84,7 @@ class UpdateProfileView(APIView):
     @classmethod
     def patch(cls, request: Request, id):
         try:
-            candidate = ProfileModel.objects.get(user_id=id)
+            candidate = ProfileModel.objects.filter(user_id=id)
             if not candidate:
                 return Response({'message': 'User with this id doesn\'t exist'})
             ProfileModel.objects.filter(user_id=id).update(
@@ -133,3 +135,32 @@ class CreateProfileView(APIView):
             return Response({'error': str(error)})
         except AttributeError as error:
             return Response({'error': str(error)})
+
+
+class AppendDeleteFavoritesView(APIView):
+    serializer_class = ProfileSerializer
+
+    def delete(self, request: Request, user_id , dish_id, *args, **kwargs):
+        dishes = DishModel.objects.filter(favorited_by__user=user_id).all()
+        print(dishes)
+        candidate = ProfileModel.objects.filter(user_id=user_id).first()
+        for dish in dishes:
+            if dish.id == dish_id:
+                candidate.fav_dishes.remove(dish)
+                return Response({'message':f'Dish {dish.name} removed from {candidate.user.username}\'s favorites!'})
+        candidate = ProfileModel.objects.filter(user_id=user_id).first()
+        if not candidate:
+            return Response({'message': 'User with this id doesn\'t exist!'})
+        print(candidate.fav_dishes)
+        return Response({'message': 'success!'})
+
+    def get(self, request: Request, user_id, dish_id, *args, **kwargs):
+        dish = DishModel.objects.filter(pk=dish_id).first()
+        candidate = ProfileModel.objects.filter(user_id=user_id).first()
+        if not candidate:
+            return Response({'message': 'User with this id doesnt exist!'})
+        if not dish:
+            return Response({'message': 'Dish with this id doesnt exist!'})
+        candidate.fav_dishes.add(dish)
+        print(candidate.fav_dishes)
+        return Response({'message': 'Dish successfully added to users favorites'})
