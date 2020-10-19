@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'Ammo_BackEnd',
     'profile',
     'corsheaders',
-    'menu'
+    'menu',
+    'order'
 ]
 
 MIDDLEWARE = [
