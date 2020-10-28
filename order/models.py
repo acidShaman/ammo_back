@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 from menu.models import DishModel
-from profile.models import AddressModel
+from profile.models import AddressModel, ProfileModel
 
 
 class OrderItemModel(models.Model):
@@ -22,9 +22,8 @@ class OrderModel(models.Model):
         verbose_name = 'order'
         verbose_name_plural = 'orders'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    address = models.ForeignKey(AddressModel, on_delete=models.CASCADE)
+    profile = models.ForeignKey(ProfileModel, on_delete=models.CASCADE, null=True, related_name='order_history')
+    address = models.ForeignKey(AddressModel, on_delete=models.SET_NULL, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
-    is_paid = models.BooleanField(default=False)
     order_items = models.ManyToManyField(OrderItemModel, related_name='orders')
+

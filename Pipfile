@@ -10,6 +10,9 @@ mysqlclient = "*"
 pillow = "*"
 djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
+config = "*"
+python-telegram-bot = "*"
+django-rest-passwordreset = "*"
 
 [dev-packages]
 

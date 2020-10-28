@@ -1,7 +1,12 @@
 import os
+
+from django.core.mail import send_mail
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.urls import reverse
+from django_rest_passwordreset.signals import reset_password_token_created
 
 from menu.models import DishModel
 
@@ -21,6 +26,8 @@ class ProfileModel(models.Model):
     sex = models.CharField(max_length=10, default='not given')
     fav_dishes = models.ManyToManyField(DishModel, related_name='favorited_by')
 
+    # order_history = models.ManyToManyField(OrderModel, related_name='ordered_by')
+
     def __str__(self):
         return f'{self.user.username}, {self.user.first_name}, {self.user.last_name}, {self.sex}, {self.birthday}, {self.phone}'
 
@@ -31,7 +38,8 @@ class AddressModel(models.Model):
         verbose_name = 'address'
         verbose_name_plural = 'addresses'
 
-    user = models.ForeignKey(User, related_name='address', on_delete=models.CASCADE)
+    profile = models.ForeignKey(ProfileModel, related_name='address',
+                                on_delete=models.CASCADE, null=True)
     street = models.CharField(max_length=50, blank=False, validators=[
         RegexValidator('^([a-zA-Zа-яА-ЯЄєЇїёЁ.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
@@ -45,10 +53,8 @@ class AddressModel(models.Model):
     floor = models.CharField(max_length=6, blank=True, null=True, validators=[
         RegexValidator('^([0-9]{0,}))$', 'Number must look like 78a or 78')])
 
-
-
-
-
+    def __str__(self):
+        return f'{self.user.username}-- {self.street} #{self.number}'
 
 
 

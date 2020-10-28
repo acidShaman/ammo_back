@@ -18,9 +18,7 @@ from django.conf import settings
 from django.urls import path
 
 from order.views import OrderCreateView
-from profile.views import ShowProfileView, CreateProfileView, UpdateProfileView, CreateUpdateAddressView, \
-    AppendDeleteFavoritesView
 
 urlpatterns = [
-    path('', OrderCreateView.as_view()),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  path('', OrderCreateView.as_view()),
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
