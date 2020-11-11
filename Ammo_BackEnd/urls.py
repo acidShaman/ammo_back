@@ -19,11 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from logincmp.views import CustomRefreshTokenView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('auth/', include('rest_framework.urls')),
     path('token/', TokenObtainPairView.as_view()),
-    path('token/refresh/', TokenRefreshView.as_view()),
+    path('token/refresh/', CustomRefreshTokenView.as_view()),
     path('profile/', include('profile.urls')),
     path('menu/', include('menu.urls')),
     path('order/', include('order.urls'))

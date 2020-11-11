@@ -12,7 +12,7 @@ class OrderItemModel(models.Model):
         verbose_name = 'item'
         verbose_name_plural = 'items'
 
-    dish = models.ForeignKey(DishModel, on_delete=models.CASCADE)
+    dish = models.ForeignKey(DishModel, related_name='order_item',on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(blank=False)
 
 

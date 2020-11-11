@@ -1,4 +1,4 @@
-from django.db.models import Model
+from django.db.models import Model, Count
 from django.shortcuts import render
 
 # Create your views here.
@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from menu.models import MenuModel, DishModel
-from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer
+from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer, MainMenuSerializer
+from order.serializers import OrderItemSerializer
 
 
 class ShowCategoriesView(APIView):
@@ -29,7 +30,6 @@ class ShowCategoriesView(APIView):
 
 class ShowPositionsView(APIView):
     serializer_class = MenuSerializer
-    # permission_classes = [AllowAny]
 
     def get(self, request: Request, category):
         try:
@@ -41,12 +41,12 @@ class ShowPositionsView(APIView):
             return Response({'error': str(err)})
 
 
-# class AppendDeleteFavoritesView(APIView):
-#     serializer_class = DishSerializer
-#
-#     def delete(self, request: Request, user_id):
-#         print(request.data)
-#
-#     def post(self, request: Request, user_id):
-#         print(request.data)
+class ShowPopularDishesView(APIView):
+    serializer_class = MenuSerializer
 
+    def get(self, request: Request):
+        try:
+            categories = MenuModel.objects.all()
+            return Response(MainMenuSerializer(categories, many=True).data)
+        except AttributeError as err:
+            return Response({'error': str(err)})

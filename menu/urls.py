@@ -17,9 +17,10 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 
-from menu.views import ShowPositionsView, ShowCategoriesView
+from menu.views import ShowPositionsView, ShowCategoriesView, ShowPopularDishesView
 
 urlpatterns = [
     path('', ShowCategoriesView.as_view()),
+    path('all/', ShowPopularDishesView.as_view()),
     path('<str:category>/', ShowPositionsView.as_view()),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -17,7 +17,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path, include
 from profile.views import ShowProfileView, CreateProfileView, UpdateProfileView, CreateUpdateAddressView, \
-    AppendDeleteFavoritesView, ChangePasswordView, ForgotPasswordView
+    AppendDeleteFavoritesView, ChangePasswordView
 
 urlpatterns = [
     path('', ShowProfileView.as_view()),
@@ -25,7 +25,6 @@ urlpatterns = [
     path('<int:id>/', UpdateProfileView.as_view()),
     path('<int:user_id>/address/', CreateUpdateAddressView.as_view()),
     path('new-password/', ChangePasswordView.as_view()),
-    path('forgot-password/', ForgotPasswordView.as_view()),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('<int:user_id>/favorites/<int:dish_id>/', AppendDeleteFavoritesView.as_view())
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

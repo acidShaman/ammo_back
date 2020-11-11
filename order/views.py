@@ -23,11 +23,14 @@ def format_request(data, order_id):
                    'door': 'Номер квартири', 'floor': 'Поверх', 'payment_method': 'Спосіб оплати',
                    'training_ch': 'К-ть навчальних паличок', 'normal_ch': 'К-ть нормальних паличок',
                    'promo_code': 'Промо-код', 'commentary': 'Коментар до замовлення',
-                   'extra_adds': 'Додатковий імбир та васабі'}
+                   'extra_adds': 'Додатковий імбир та васабі', 'price': 'Сума'}
     message = f'Замовлення №{order_id}\n'
     for k, v in data.lists():
         if k in translation.keys():
-            message += f'{translation[k]}: {v[0]}\n'
+            if k == 'price':
+                message += f'{translation[k]}: {v[0]} грн. \n'
+            else:
+                message += f'{translation[k]}: {v[0]}\n'
         if k == 'orderItems':
             message += f'Позиції: \n'
             items = json.loads(v[0])
@@ -58,7 +61,7 @@ class OrderCreateView(APIView):
             order = OrderModel(profile=candidate, address=address)
         else:
             order = OrderModel()
-
+        order.save()
         format_request(request.data, order.id)
         total_price = 0
         for key, value in request.data.lists():
@@ -70,4 +73,5 @@ class OrderCreateView(APIView):
                         order_item = OrderItemModel(dish_id=item['id'], quantity=item['quantity'])
                         order_item.save()
                         order.order_items.add(order_item)
+
         return Response({'message': 'Success'})

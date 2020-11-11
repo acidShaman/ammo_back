@@ -1,12 +1,7 @@
-import os
-
-from django.core.mail import send_mail
 from django.db import models
 from django.core.validators import RegexValidator
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.urls import reverse
-from django_rest_passwordreset.signals import reset_password_token_created
+
 
 from menu.models import DishModel
 
@@ -17,7 +12,7 @@ class ProfileModel(models.Model):
         verbose_name = 'profile'
         verbose_name_plural = 'profiles'
 
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, related_name='profile', blank=True,on_delete=models.CASCADE)
     phone = models.CharField(max_length=15, blank=False, unique=True, validators=[
         RegexValidator('^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$',
                        'Phone number must look like this +380112233445')],
@@ -43,15 +38,15 @@ class AddressModel(models.Model):
     street = models.CharField(max_length=50, blank=False, validators=[
         RegexValidator('^([a-zA-Zа-яА-ЯЄєЇїёЁ.,-]{1,50})$', 'Street must contain only letters and , . -')])
     number = models.CharField(max_length=6, blank=False, validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-яЄєЇїёЁ.,-]{0,}))$', 'Number must look like 78a or 78')])
     entrance = models.CharField(max_length=6, blank=True, null=True, validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-яЄєЇїёЁ.,-]{0,}))$', 'Number must look like 78a or 78')])
     housing = models.CharField(max_length=5, blank=True, null=True, validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-я]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]+\s*([a-zA-ZА-Яа-яЄєЇїёЁ.,-]{0,}))$', 'Number must look like 78a or 78')])
     door = models.CharField(max_length=7, blank=True, null=True, validators=[
-        RegexValidator('^([0-9]+\s*([a-zA-Zа-яА-Я]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]+\s*([a-zA-Zа-яА-ЯЄєЇїёЁ.,-]{0,}))$', 'Number must look like 78a or 78')])
     floor = models.CharField(max_length=6, blank=True, null=True, validators=[
-        RegexValidator('^([0-9]{0,}))$', 'Number must look like 78a or 78')])
+        RegexValidator('^([0-9]{0,})$', 'Number must look like 78a or 78')])
 
     def __str__(self):
         return f'{self.user.username}-- {self.street} #{self.number}'
