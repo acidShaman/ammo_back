@@ -63,15 +63,15 @@ class CreateUpdateAddressView(APIView):
                 if not serializer.is_valid():
                     return Response({'error': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
                 serializer.save()
-                # AddressModel(
-                #     street=request.data.get('street', ''),
-                #     number=request.data.get('number', ''),
-                #     entrance=request.data.get('entrance', ''),
-                #     housing=request.data.get('housing', ''),
-                #     door=request.data.get('door', ''),
-                #     floor=request.data.get('floor', ''),
-                #     user_id=user_id
-                # ).save()
+                AddressModel(
+                    street=request.data.get('street', ''),
+                    number=request.data.get('number', ''),
+                    entrance=request.data.get('entrance', ''),
+                    housing=request.data.get('housing', ''),
+                    door=request.data.get('door', ''),
+                    floor=request.data.get('floor', ''),
+                    profile=ProfileModel.objects.filter(user_id=user_id).first()
+                ).save()
                 return Response({'message': f'Address was added to user {user_id}'}, status=status.HTTP_201_CREATED)
             address = AddressModel.objects.filter(profile__user_id=user_id).first()
             serializer = AddressUpdateSerializer(address, request.data)
@@ -102,6 +102,8 @@ class ShowProfileView(APIView):
     def get(cls, request: Request):
         try:
             profile = ProfileModel.objects.get(user_id=request.user.id)
+            print(request.user.is_staff)
+            print(profile.user.is_staff)
             if not profile:
                 return Response({'error': 'User doesn\'t exist!'})
             return Response(ProfileSerializer(profile).data)
@@ -168,6 +170,7 @@ class CreateProfileView(APIView):
     @classmethod
     def post(cls, request: Request, *args, **kwargs):
         try:
+            print(request.data)
             serializer = UserCreateSerializer(data=request.data)
             if not serializer.is_valid():
                 return Response({'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

@@ -15,7 +15,7 @@ class AddressSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'first_name', 'last_name', 'date_joined']
+        fields = ['id', 'username', 'first_name', 'last_name', 'date_joined', 'is_staff']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -33,9 +33,7 @@ class UserCreateSerializer(serializers.Serializer):
     username = serializers.EmailField(min_length=3, required=True)
     first_name = serializers.CharField(min_length=2, required=True)
     last_name = serializers.CharField(min_length=2, required=True)
-    password = serializers.CharField(min_length=6, required=True,
-                                     validators=[RegexValidator('^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$',
-                                                                'Password must contain minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number with no spaces.')])
+    password = serializers.CharField(min_length=6, required=True)
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):

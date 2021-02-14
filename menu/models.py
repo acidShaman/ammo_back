@@ -31,7 +31,7 @@ class DishModel(models.Model):
         verbose_name_plural = 'dishes'
 
     name = models.CharField(max_length=50, blank=False, unique=True, validators=[
-        RegexValidator('^([0-9a-zA-Zа-яА-ЯєЄІіЇїёЁ+Ґґ\",./`: !\']{1,50})$', 'Name can contain a-z A-Z and some spec chars max 50 chars')])
+        RegexValidator('^([0-9a-zA-Zа-яА-ЯєЄІіЇїёЁ+Ґґ\",./`: _!\']{1,50})$', 'Name can contain a-z A-Z and some spec chars max 50 chars')])
     category = models.ForeignKey(MenuModel, related_name='dishes', on_delete=models.CASCADE)
     price = models.PositiveIntegerField(blank=False)
     about_dish = models.CharField(max_length=300, blank=False, validators=[

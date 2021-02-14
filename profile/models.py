@@ -17,7 +17,7 @@ class ProfileModel(models.Model):
         RegexValidator('^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$',
                        'Phone number must look like this +380112233445')],
                              error_messages={'error': 'Phone number might already ne used, please try another one'})
-    birthday = models.DateField(max_length=10)
+    birthday = models.DateField(max_length=10, null=True)
     sex = models.CharField(max_length=10, default='not given')
     fav_dishes = models.ManyToManyField(DishModel, related_name='favorited_by')
 
