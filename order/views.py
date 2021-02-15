@@ -18,7 +18,7 @@ from profile.serializers import ProfileSerializer
 
 
 def format_request(data, order_id):
-    translation = {'first_name': 'Ім\'я', 'last_name': 'Прізвище', 'phone': 'Номер телефону',
+    translation = {'currentCity': 'Місто', 'first_name': 'Ім\'я', 'last_name': 'Прізвище', 'phone': 'Номер телефону',
                    'street': 'Вулиця', 'number': 'Номер вулиці', 'entrance': 'Під\'їзд', 'housing': 'Корпус',
                    'door': 'Номер квартири', 'floor': 'Поверх', 'payment_method': 'Спосіб оплати',
                    'training_ch': 'К-ть навчальних паличок', 'normal_ch': 'К-ть нормальних паличок',
