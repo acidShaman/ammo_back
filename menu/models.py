@@ -13,12 +13,13 @@ class MenuModel(models.Model):
         verbose_name = 'category'
         verbose_name_plural = 'categories'
 
-    category = models.CharField(max_length=20, blank=False,unique=True, validators=[
-        RegexValidator('^([a-zA-Z -]{1,20})$', 'Category must be only letters 1 - 20 chars long')])
-    name = models.CharField(max_length=20, null=True, unique=True, validators=[
-        RegexValidator('^([А-Яа-яїЇєЄіІ ]{1,20})$', '')
+    category = models.CharField(max_length=30, blank=False, unique=True, validators=[
+        RegexValidator('^([a-zA-Z0-9 -]{1,20})$', 'Category must be only letters 1 - 20 chars long')])
+    name = models.CharField(max_length=30, null=True, unique=True, validators=[
+        RegexValidator("^([a-zA-ZА-Яа-яЇїєЄёЁіІ`'-.,0-9 ]{1,30})$")
     ])
     image = models.ImageField(upload_to=os.path.join('images', 'categories'), null=True, blank=True)
+    isShown = models.BooleanField(default=False)
 
     def __str__(self):
         return ','.join([str(self.id), str(self.category)])

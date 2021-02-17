@@ -16,7 +16,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MenuModel
-        fields = ['id', 'category', 'name', 'dishes']
+        fields = ['id', 'category', 'name', 'isShown', 'dishes']
 
 
 class MainMenuSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class MainMenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MenuModel
-        fields = ['id', 'category', 'name', 'dishes']
+        fields = ['id', 'category', 'name', 'isShown', 'dishes']
 
     def to_representation(self, instance):
         filter_dishes = instance.dishes.all()[:8]
@@ -39,4 +39,20 @@ class MainMenuSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuModel
-        fields = ['id', 'category', 'name', 'image']
+        fields = ['category', 'name', 'isShown', 'image']
+
+    def create(self, validated_data):
+        category = MenuModel(
+            category=validated_data['value'],
+            name=validated_data['name'],
+            isShown=validated_data['isShow'],
+            image=validated_data['image']
+        )
+        category.save()
+
+    # def is_valid(self, raise_exception=False):
+
+
+
+
+
