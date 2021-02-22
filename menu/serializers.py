@@ -39,6 +39,21 @@ class MainMenuSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuModel
+        fields = ['id', 'category', 'name', 'isShown', 'image']
+
+    # def create(self, validated_data):
+    #     category = MenuModel(
+    #         category=validated_data['value'],
+    #         name=validated_data['name'],
+    #         isShown=validated_data['isShow'],
+    #         image=validated_data['image']
+    #     )
+    #     category.save()
+
+
+class CreateCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuModel
         fields = ['category', 'name', 'isShown', 'image']
 
     def create(self, validated_data):
@@ -49,10 +64,34 @@ class CategorySerializer(serializers.ModelSerializer):
             image=validated_data['image']
         )
         category.save()
-
-    # def is_valid(self, raise_exception=False):
-
+# def is_valid(self, raise_exception=False):
 
 
+class EditCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuModel
+        fields = ['id', 'category', 'name', 'isShown', 'image']
+        extra_kwargs = {
+            'category': {
+                'required': False
+            },
+            'name': {
+                'required': False
+            },
+            'isShown': {
+                'required': False
+            },
+            'image': {
+                'required': False
+            }
+        }
 
-
+    # def create(self, validated_data):
+    #     category = MenuModel(
+    #         category=validated_data['value'],
+    #         name=validated_data['name'],
+    #         isShown=validated_data['isShow'],
+    #         image=validated_data['image']
+    #     )
+    #     category.save()
+# def is_valid(self, raise_exception=False):

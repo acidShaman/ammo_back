@@ -17,11 +17,13 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path
 
-from menu.views import ShowPositionsView, ShowCategoriesView, ShowPopularDishesView, CreateNewCategoryView
+from menu.views import ShowPositionsView, ShowCategoriesView, ShowPopularDishesView, CreateNewCategoryView, \
+    EditCategoryView
 
 urlpatterns = [
     path('', ShowCategoriesView.as_view()),
     path('category/new/', CreateNewCategoryView.as_view()),
+    path('category/<int:id>/edit/', EditCategoryView.as_view()),
     path('all/', ShowPopularDishesView.as_view()),
     path('<str:category>/', ShowPositionsView.as_view()),
 

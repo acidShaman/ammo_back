@@ -7,7 +7,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from menu.models import MenuModel, DishModel
-from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer, MainMenuSerializer
+from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer, MainMenuSerializer, \
+    CreateCategorySerializer, EditCategorySerializer
 
 
 class ShowCategoriesView(APIView):
@@ -49,13 +50,13 @@ class ShowPopularDishesView(APIView):
 
 
 class CreateNewCategoryView(APIView):
-    serializer_class = CategorySerializer
+    serializer_class = CreateCategorySerializer
 
     @classmethod
     def post(cls, request: Request):
         try:
             print(request.data)
-            serializer = CategorySerializer(data=request.data)
+            serializer = CreateCategorySerializer(data=request.data)
             isShown = True if request.data['isShown'] and request.data['isShown'] == 'true' else False
             # if request.data['image'] == 'undefined':
             #     request.data['image'] = None
@@ -65,6 +66,39 @@ class CreateNewCategoryView(APIView):
                 category = MenuModel(category=request.data['category'], name=request.data['name'], isShown=isShown, image=request.data.get('image', None))
                 category.save()
                 return Response(CategorySerializer(category).data, status=200)
+        except RuntimeError as err:
+            return Response({'error': str(err)})
+        except AssertionError as err:
+            return Response({'error': str(err)})
+        except ValidationError as err:
+            return Response({'error': str(err)})
+        except IntegrityError as error:
+            return Response({'error': str(error)})
+        except AttributeError as error:
+            return Response({'error': str(error)})
+        except KeyError as err:
+            return Response({'error': str(err)})
+
+
+class EditCategoryView(APIView):
+    serializer_class = EditCategorySerializer
+
+    @classmethod
+    def patch(cls, request: Request, id):
+        try:
+            if not request.user.isStaff:
+                return Response({'message': 'You are not the ADMIN!'}, status=400)
+            print(request.data, id)
+            serializer = EditCategorySerializer(data=request.data)
+            if not serializer.is_valid():
+                return Response({'message': serializer.errors}, status=400)
+            category = MenuModel.objects.filter(id=id).first()
+            category.name = request.data.get('name', category.name)
+            category.category = request.data.get('category', category.category)
+            category.image = request.data.get('image', category.image)
+            category.isShown = request.data.get('isShown', category.isShown)
+            category.save()
+            return Response(CategorySerializer(category).data, status=200)
         except RuntimeError as err:
             return Response({'error': str(err)})
         except AssertionError as err:

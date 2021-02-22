@@ -18,7 +18,7 @@ class MenuModel(models.Model):
     name = models.CharField(max_length=30, null=True, unique=True, validators=[
         RegexValidator("^([a-zA-ZА-Яа-яЇїєЄёЁіІ`'-.,0-9 ]{1,30})$")
     ])
-    image = models.ImageField(upload_to=os.path.join('images', 'categories'), null=True, blank=True)
+    image = models.ImageField(upload_to=os.path.join('images', 'categories'), null=True, blank=True, default=None)
     isShown = models.BooleanField(default=False)
 
     def __str__(self):
