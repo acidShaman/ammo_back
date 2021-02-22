@@ -86,7 +86,7 @@ class EditCategoryView(APIView):
     @classmethod
     def patch(cls, request: Request, id):
         try:
-            if not request.user.isStaff:
+            if not request.user.is_staff:
                 return Response({'message': 'You are not the ADMIN!'}, status=400)
             print(request.data, id)
             serializer = EditCategorySerializer(data=request.data)
