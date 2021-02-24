@@ -2,13 +2,14 @@
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import ListAPIView
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from menu.models import MenuModel, DishModel
 from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer, MainMenuSerializer, \
-    CreateCategorySerializer, EditCategorySerializer
+    CreateCategorySerializer, EditCategorySerializer, NestedPositionsSerializer
 
 
 class ShowCategoriesView(APIView):
@@ -17,7 +18,6 @@ class ShowCategoriesView(APIView):
     def get(self, request: Request):
         try:
             categories = MenuModel.objects.all()
-            print(CategorySerializer(categories, many=True).data)
             if not categories:
                 return Response({'message': 'There is no dishes available at the moment!'})
             return Response(CategorySerializer(categories, many=True).data)
@@ -88,7 +88,6 @@ class EditCategoryView(APIView):
         try:
             if not request.user.is_staff:
                 return Response({'message': 'You are not the ADMIN!'}, status=400)
-            print(request.data, id)
             serializer = EditCategorySerializer(data=request.data)
             if not serializer.is_valid():
                 return Response({'message': serializer.errors}, status=400)
@@ -111,3 +110,9 @@ class EditCategoryView(APIView):
             return Response({'error': str(error)})
         except KeyError as err:
             return Response({'error': str(err)})
+
+
+class ShowAllPositionsView(ListAPIView):
+    serializer_class = NestedPositionsSerializer
+    queryset = MenuModel.objects.all()
+

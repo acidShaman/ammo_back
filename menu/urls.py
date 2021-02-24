@@ -18,13 +18,14 @@ from django.conf import settings
 from django.urls import path
 
 from menu.views import ShowPositionsView, ShowCategoriesView, ShowPopularDishesView, CreateNewCategoryView, \
-    EditCategoryView
+    EditCategoryView, ShowAllPositionsView
 
 urlpatterns = [
     path('', ShowCategoriesView.as_view()),
     path('category/new/', CreateNewCategoryView.as_view()),
     path('category/<int:id>/edit/', EditCategoryView.as_view()),
-    path('all/', ShowPopularDishesView.as_view()),
+    path('few/', ShowPopularDishesView.as_view()),
+    path('all/', ShowAllPositionsView.as_view()),
     path('<str:category>/', ShowPositionsView.as_view()),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
