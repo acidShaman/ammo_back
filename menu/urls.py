@@ -18,7 +18,7 @@ from django.conf import settings
 from django.urls import path
 
 from menu.views import ShowPositionsView, ShowCategoriesView, ShowPopularDishesView, CreateNewCategoryView, \
-    EditCategoryView, ShowAllPositionsView
+    EditCategoryView, ShowAllPositionsView, CreateNewPositionView, EditPositionView
 
 urlpatterns = [
     path('', ShowCategoriesView.as_view()),
@@ -26,6 +26,8 @@ urlpatterns = [
     path('category/<int:id>/edit/', EditCategoryView.as_view()),
     path('few/', ShowPopularDishesView.as_view()),
     path('all/', ShowAllPositionsView.as_view()),
+    path('position/new/', CreateNewPositionView.as_view()),
+    path('position/<int:id>/edit/', EditPositionView.as_view()),
     path('<str:category>/', ShowPositionsView.as_view()),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 from menu.models import MenuModel, DishModel
 from rest_framework import serializers
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuModel
@@ -46,7 +47,44 @@ class DishSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DishModel
-        fields = ['id', 'name', 'price', 'about_dish', 'ingredients', 'image']
+        fields = ['id', 'name', 'price', 'about_dish', 'ingredients', 'image', 'weight']
+
+
+class EditPositionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DishModel
+        fields = ['id', 'name', 'category', 'price', 'about_dish', 'ingredients', 'image', 'weight']
+        extra_kwargs = {
+            'category': {
+                'required': False
+            },
+            'name': {
+                'required': False
+            },
+            'image': {
+                'required': False
+            },
+            'price': {
+                'required': False
+            },
+            'weight': {
+                'required': False
+            },
+            'ingredients': {
+                'required': False
+            },
+            'about_dish': {
+                'required': False
+            },
+        }
+
+
+class CreatePositionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DishModel
+        fields = ['name', 'price', 'about_dish', 'ingredients', 'image', 'weight', 'category']
 
 
 class NestedPositionsSerializer(serializers.ModelSerializer):
@@ -55,16 +93,6 @@ class NestedPositionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuModel
         fields = ['id', 'category', 'name', 'isShown', 'dishes']
-
-    def to_representation(self, instance):
-        if len(instance.dishes.all()) >= 1:
-            return {
-                "id": instance.id,
-                "name": instance.name,
-                "category": instance.category,
-                'isShown': instance.isShown,
-                "dishes": DishSerializer(instance.dishes.all(), many=True).data
-            }
 
 
 class MenuSerializer(serializers.ModelSerializer):

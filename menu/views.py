@@ -9,7 +9,8 @@ from rest_framework.views import APIView
 
 from menu.models import MenuModel, DishModel
 from menu.serializers import MenuSerializer, DishSerializer, CategorySerializer, MainMenuSerializer, \
-    CreateCategorySerializer, EditCategorySerializer, NestedPositionsSerializer
+    CreateCategorySerializer, EditCategorySerializer, NestedPositionsSerializer, CreatePositionSerializer, \
+    EditPositionSerializer
 
 
 class ShowCategoriesView(APIView):
@@ -63,7 +64,8 @@ class CreateNewCategoryView(APIView):
             if not serializer.is_valid():
                 return Response({'message': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                category = MenuModel(category=request.data['category'], name=request.data['name'], isShown=isShown, image=request.data.get('image', None))
+                category = MenuModel(category=request.data['category'], name=request.data['name'], isShown=isShown,
+                                     image=request.data.get('image', None))
                 category.save()
                 return Response(CategorySerializer(category).data, status=200)
         except RuntimeError as err:
@@ -116,3 +118,70 @@ class ShowAllPositionsView(ListAPIView):
     serializer_class = NestedPositionsSerializer
     queryset = MenuModel.objects.all()
 
+
+class CreateNewPositionView(APIView):
+    serializer_class = CreatePositionSerializer
+
+    @classmethod
+    def post(cls, request: Request):
+        try:
+            print(request.data)
+            serializer = CreatePositionSerializer(data=request.data)
+            if not request.user.is_staff:
+                return Response({'message': 'Not enough privileges to create positions!'}, status=401)
+            if not serializer.is_valid():
+                return Response({'message': serializer.errors}, status=400)
+            candidate = DishModel(name=request.data.get('name'), price=request.data.get('price'),
+                                  weight=request.data.get('weight'), ingredients=request.data.get('ingredients'),
+                                  about_dish=request.data.get('about_dish'), category_id=request.data.get('category'),
+                                  image=request.data.get('image'))
+            candidate.save()
+            return Response(DishSerializer(candidate).data, status=200)
+        except RuntimeError as err:
+            return Response({'error': str(err)})
+        except AssertionError as err:
+            return Response({'error': str(err)})
+        except ValidationError as err:
+            return Response({'error': str(err)})
+        except IntegrityError as error:
+            return Response({'error': str(error)})
+        except AttributeError as error:
+            return Response({'error': str(error)})
+        except KeyError as err:
+            return Response({'error': str(err)})
+
+
+class EditPositionView(APIView):
+    serializer_class = EditPositionSerializer
+
+    @classmethod
+    def patch(cls, request: Request, id):
+        try:
+            print(request.data, id)
+            if not request.user.is_staff:
+                return Response({'message': 'You are not the ADMIN!'}, status=400)
+            serializer = EditPositionSerializer(data=request.data)
+            if not serializer.is_valid():
+                return Response({'message': serializer.errors}, status=400)
+            position = DishModel.objects.filter(id=id).first()
+            position.name = request.data.get('name', position.name)
+            position.category_id = request.data.get('category', position.category_id)
+            position.image = request.data.get('image', position.image)
+            position.price = request.data.get('price', position.price)
+            position.weight = request.data.get('weight', position.weight)
+            position.ingredients = request.data.get('ingredients', position.ingredients)
+            position.about_dish = request.data.get('about_dish', position.about_dish)
+            position.save()
+            return Response(DishSerializer(position).data, status=200)
+        except RuntimeError as err:
+            return Response({'error': str(err)})
+        except AssertionError as err:
+            return Response({'error': str(err)})
+        except ValidationError as err:
+            return Response({'error': str(err)})
+        except IntegrityError as error:
+            return Response({'error': str(error)})
+        except AttributeError as error:
+            return Response({'error': str(error)})
+        except KeyError as err:
+            return Response({'error': str(err)})
